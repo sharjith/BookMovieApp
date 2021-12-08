@@ -1,12 +1,12 @@
 import React from 'react';
-import './MovieList.css';
+import './UpcomingMovieList.css';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 
-const MovieList = (props) => {
+const UpcomingMovieList = (props) => {
     return(
         <GridList id='upcoming-movies-grid' cellHeight={250} cols={6}>
             {props.movies.map((movie, index)=> 
@@ -25,4 +25,4 @@ const MovieList = (props) => {
     )
 }
 
-export default MovieList;
+export default UpcomingMovieList;
