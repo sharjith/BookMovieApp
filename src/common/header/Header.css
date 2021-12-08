@@ -1,0 +1,42 @@
+.header {
+    background: #222;
+    height: 36px;    
+    padding-top: 8px;
+    padding-bottom: 8px;    
+    padding-right: 32px;
+    padding-left: 16px;
+
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+@-webkit-keyframes logo-animation {
+    to { -webkit-transform: rotateY(360deg); }
+}
+@keyframes logo-animation {
+    to { transform: rotateY(360deg); }          
+}
+@-moz-keyframes logo-animation{
+    to { -moz-transform: rotateY(360deg); }
+}
+
+#logo {    
+    float: left;
+    -webkit-animation: logo-animation 8s infinite linear;
+    -moz-animation: logo-animation 8s infinite linear;
+    animation: logo-animation 8s infinite linear;
+}
+#logo img{
+    height: 35px;
+    background-color: #ff7f7f;
+}
+
+#btnLogin {    
+    float: right;
+}
+
+#btnBookShow {
+    float: right;
+    margin-right: 10px;
+}
