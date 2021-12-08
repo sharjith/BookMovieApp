@@ -1,0 +1,6 @@
+#released-movies-grid{
+    display: 'flex';
+    flex-wrap: nowrap;
+    justify-content: flex-start; 
+    overflow: auto;    
+}
