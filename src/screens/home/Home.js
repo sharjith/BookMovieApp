@@ -5,6 +5,8 @@ import UpcomingMoviesList from './UpcomingMovieList';
 import ReleasedMoviesList from './ReleasedMoviesList';
 import { Grid } from "@material-ui/core";
 import MovieFilterCard from "./MovieFilterCard";
+import { RestaurantMenu } from "@material-ui/icons";
+import AuthContainer from "./AuthContainer";
 
 
 function Home(props) {
@@ -35,7 +37,7 @@ function Home(props) {
     }, [])
 
 
-    return (
+    /*return (
         <div>
             <Header>Header</Header>
             <div>
@@ -46,16 +48,19 @@ function Home(props) {
                     <UpcomingMoviesList movies={upcomingMovies} />
                 </div>
 
-                <Grid container>
+                
                 <div>
                     <ReleasedMoviesList movies={releasedMovies} />
                 </div>
                 <div>
                     <MovieFilterCard />
                 </div>
-                </Grid>
-
             </div>
+        </div>
+    );*/
+    return(
+        <div>
+            <AuthContainer />
         </div>
     );
 }
