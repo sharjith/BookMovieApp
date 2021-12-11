@@ -1,42 +1,42 @@
-.header {
-    background: #222;
-    height: 36px;    
-    padding-top: 8px;
-    padding-bottom: 8px;    
-    padding-right: 32px;
-    padding-left: 16px;
-
-    text-align: center;
-    color: #fff;
-    text-transform: uppercase;
+.app-header {
+  background-color: #222;
+  height: 36px;
+  padding: 8px 32px 8px 16px;
 }
 
-@-webkit-keyframes logo-animation {
-    to { -webkit-transform: rotateY(360deg); }
-}
-@keyframes logo-animation {
-    to { transform: rotateY(360deg); }          
-}
-@-moz-keyframes logo-animation{
-    to { -moz-transform: rotateY(360deg); }
+.login-button {
+  float: right;
 }
 
-#logo {    
-    float: left;
-    -webkit-animation: logo-animation 8s infinite linear;
-    -moz-animation: logo-animation 8s infinite linear;
-    animation: logo-animation 8s infinite linear;
-}
-#logo img{
-    height: 35px;
-    background-color: #ff7f7f;
+.app-logo {
+  animation: app-logo-spin infinite 8s linear;
+  height: 35px;
+  background: #ff7f7f;
 }
 
-#btnLogin {    
-    float: right;
+.bookshow-button {
+  float: right;
+  margin-right: 8px;
 }
 
-#btnBookShow {
-    float: right;
-    margin-right: 10px;
+@keyframes app-logo-spin {
+  from {
+    transform: scaleX(-1);
+  }
+}
+
+.tabs {
+  margin-bottom: 20px;
+}
+
+.dispNone {
+  display: none;
+}
+
+.dispBlock {
+  display: block;
+}
+
+.red {
+  color: red;
 }
