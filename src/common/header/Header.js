@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from 'react';
+/**
+This component displays the header that is common for all screens in the top side of the page layout
+ */
+
+import React, { useState } from 'react';
 
 import './Header.css';
 import Button from '@material-ui/core/Button';
@@ -26,6 +30,7 @@ const customStyles = {
         transform: 'translate(-50%, -50%)'
     }
 };
+
 const TabContainer = function (props) {
     return (
         <Typography component="div" style={{ padding: 0, textAlign: 'center' }}>
@@ -37,7 +42,9 @@ const TabContainer = function (props) {
 TabContainer.propTypes = {
     children: PropTypes.node.isRequired
 }
+
 const Header = (props) => {
+
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [value, setValue] = useState(0);
     const [username, setUsername] = useState("");
@@ -59,35 +66,47 @@ const Header = (props) => {
 
 
 
+    /** Handler  to set the state of any modal open to track the status */
     const openModalHandler = () => {
         setModalIsOpen(true);
 
     }
 
+    /** Handler  to set the state of any modal closed to track the status */
     const closeModalHandler = () => {
         setModalIsOpen(false);
     }
 
+    /** Handler  to set the current tab */
     const tabChangeHandler = (event, value) => {
         setValue(value);
     }
 
+    /** Handler  to process the login action */
     const loginClickHandler = () => {
         username === "" ? setUsernameRequired("dispBlock") : setUsernameRequired("dispNone");
         loginPassword === "" ? setLoginPasswordRequired("dispBlock") : setLoginPasswordRequired("dispNone");
 
+        /** Build the header with the basic authentication token */
         const headers = {
-            "Authorization": window.btoa(username + ":" + loginPassword),
+            "Authorization": `Basic ${window.btoa(username + ":" + loginPassword)}`,
             'Content-Type': 'application/json',
             'Cache-Control': "no-cache"
-
         }
+
+        //const token = Buffer.from(`${username}:${loginPassword}`, 'utf8').toString('base64');
+
+        /** use Axios post the sendthe header to the login API */
         axios.post(props.baseUrl + "auth/login", {}, {
-            auth: {
+            headers
+            /*headers: {
+                'Authorization': `Basic ${token}`
+            }*/
+            /*auth: {
                 username: username,
                 password: loginPassword
-            }
-        }).then(res => {
+            }*/
+        }).then(res => {            
             sessionStorage.setItem("uuid", res.data.id);
             sessionStorage.setItem("access-token", res.headers['access-token']);
 
@@ -98,6 +117,7 @@ const Header = (props) => {
 
     }
 
+    /** The following two handlers are for storing the inputs of username and password by the user */
     const inputUsernameChangeHandler = (e) => {
         setUsername(e.target.value);
     }
@@ -106,6 +126,7 @@ const Header = (props) => {
         setloginPassword(e.target.value)
     }
 
+    /** Registration processing handler */
     const registerClickHandler = () => {
         firstname === "" ? setFirstnameRequired("dispBlock") : setFirstnameRequired("dispNone");
         lastname === "" ? setLastnameRequired("dispBlock") : setLastnameRequired("dispNone");
@@ -127,6 +148,7 @@ const Header = (props) => {
 
     }
 
+    /** The following five handlers are for storing the inputs by the user for registration details */
     const inputFirstNameChangeHandler = (e) => {
         setfFirstname(e.target.value);
     }
@@ -147,6 +169,7 @@ const Header = (props) => {
         setContact(e.target.value)
     }
 
+    /** Handles the logout button click event */
     const logoutHandler = (e) => {
         sessionStorage.removeItem("uuid");
         sessionStorage.removeItem("access-token");
@@ -154,8 +177,10 @@ const Header = (props) => {
 
     }
 
+    /** return the div with the header, login/logout button, BookShow button and the Login/Register Modal */
     return (
         <div>
+            {/** The App header with login/logout and book show buttons*/}
             <header className="app-header">
                 <img src={logo} className="app-logo" alt="Movies App Logo" />
                 {!loggedIn ?
@@ -171,6 +196,7 @@ const Header = (props) => {
                         </Button>
                     </div>
                 }
+
                 {props.showBookShowButton === "true" && !loggedIn
                     ? <div className="bookshow-button">
                         <Button variant="contained" color="primary" onClick={openModalHandler}>
@@ -192,6 +218,8 @@ const Header = (props) => {
                 }
 
             </header>
+
+            {/** The Login/Register Modal*/}
             <Modal
                 ariaHideApp={false}
                 isOpen={modalIsOpen}
