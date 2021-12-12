@@ -16,7 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import PropTypes from 'prop-types';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -63,13 +63,14 @@ const Header = (props) => {
     const [contact, setContact] = useState("0");
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [loggedIn, setLoggedIn] = useState(sessionStorage.getItem("access-token") == null ? false : true);
+    const [bookShowRequested, setBookShowRequested] = useState(false);
 
 
+    const history = useHistory();
 
     /** Handler  to set the state of any modal open to track the status */
     const openModalHandler = () => {
         setModalIsOpen(true);
-
     }
 
     /** Handler  to set the state of any modal closed to track the status */
@@ -113,6 +114,11 @@ const Header = (props) => {
             setLoggedIn(true)
 
             closeModalHandler();
+
+            if(bookShowRequested){
+                history.push('/bookshow/' + props.id);
+                setBookShowRequested(false);
+            }
         });
 
     }
@@ -177,6 +183,11 @@ const Header = (props) => {
 
     }
 
+    const guestBookShowHandler = (e) => {
+        openModalHandler();
+        setBookShowRequested(true);
+    } 
+
     /** return the div with the header, login/logout button, BookShow button and the Login/Register Modal */
     return (
         <div>
@@ -199,7 +210,7 @@ const Header = (props) => {
 
                 {props.showBookShowButton === "true" && !loggedIn
                     ? <div className="bookshow-button">
-                        <Button variant="contained" color="primary" onClick={openModalHandler}>
+                        <Button variant="contained" color="primary" onClick={guestBookShowHandler}>
                             Book Show
                         </Button>
                     </div>
