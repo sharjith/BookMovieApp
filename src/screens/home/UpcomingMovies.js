@@ -1,3 +1,7 @@
+/*
+This component displays the upcoming movies in the top side of the page layout
+ */
+
 import { GridList, GridListTile, GridListTileBar } from "@material-ui/core";
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
@@ -21,10 +25,11 @@ const styles = theme => ({
     },
 
 });
+
 const UpcomingMovies =(props)=> {
     const [upcomingMovies, setUpcomingMovies] =useState([]);
     useEffect(() =>{
-        axios.get(props.baseUrl + "movies?status=PUBLISHED")
+        axios.get(props.baseUrl + "movies?status=PUBLISHED&limit=6") 
         .then(res => {
         setUpcomingMovies(res.data.movies)
 
@@ -49,4 +54,5 @@ const UpcomingMovies =(props)=> {
                 </div>
     )
 }
+
 export default withStyles(styles)(UpcomingMovies);
