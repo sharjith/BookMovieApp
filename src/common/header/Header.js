@@ -88,54 +88,67 @@ const Header = (props) => {
         username === "" ? setUsernameRequired("dispBlock") : setUsernameRequired("dispNone");
         loginPassword === "" ? setLoginPasswordRequired("dispBlock") : setLoginPasswordRequired("dispNone");
 
-        /** Build the header with the basic authentication token */
-        const headers = {
-            "Authorization": `Basic ${window.btoa(username + ":" + loginPassword)}`,
-            'Content-Type': 'application/json',
-            'Cache-Control': "no-cache"
-        }
+        if (username && loginPassword) {
 
-        //const token = Buffer.from(`${username}:${loginPassword}`, 'utf8').toString('base64');
-
-        /** use Axios post the sendthe header to the login API */
-        axios.post(props.baseUrl + "auth/login", {}, {
-            headers
-            /*headers: {
-                'Authorization': `Basic ${token}`
-            }*/
-            /*auth: {
-                username: username,
-                password: loginPassword
-            }*/
-        }).then(res => {
-            sessionStorage.setItem("uuid", res.data.id);
-            sessionStorage.setItem("access-token", res.headers['access-token']);
-
-            setLoggedIn(true)
-
-            closeModalHandler();
-
-            /** If the user is shown the login modal because he clicked the book show 
-             * button without logging in, then take the user to the book show page
-             */
-            if (bookShowRequested) {
-                history.push('/bookshow/' + props.id);
-                setBookShowRequested(false);
+            /** Build the header with the basic authentication token */
+            const headers = {
+                "Authorization": `Basic ${window.btoa(username + ":" + loginPassword)}`,
+                'Content-Type': 'application/json',
+                'Cache-Control': "no-cache"
             }
-        }).catch(
-            function (error) {
-                if (error.response) {
-                    // Request made and server responded
-                    alert(error.response.data.message);
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    alert(error.request);
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    alert('Error', error.message);
+
+            //const token = Buffer.from(`${username}:${loginPassword}`, 'utf8').toString('base64');
+
+            /** use Axios post the sendthe header to the login API */
+            axios.post(props.baseUrl + "auth/login", {}, {
+                headers
+                /*headers: {
+                    'Authorization': `Basic ${token}`
+                }*/
+                /*auth: {
+                    username: username,
+                    password: loginPassword
+                }*/
+            }).then(res => {
+                sessionStorage.setItem("uuid", res.data.id);
+                sessionStorage.setItem("access-token", res.headers['access-token']);
+
+                setLoggedIn(true)
+
+                closeModalHandler();
+
+                /** If the user is shown the login modal because he clicked the book show 
+                 * button without logging in, then take the user to the book show page
+                 */
+                if (bookShowRequested) {
+                    history.push('/bookshow/' + props.id);
+                    setBookShowRequested(false);
                 }
-            }
-        );
+            }).catch(
+                function (error) {
+                    if (error.response) {
+                        // Request made and server responded
+                        let message = error.response.data.message;
+                        if (message === 'Password match failed' ||
+                            message === 'Username does not exist' ||
+                            message === 'User account is LOCKED') {
+                            alert(error.response.data.message);
+                        } else {
+                            console.log(error.message);
+                        }
+
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        alert(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        alert('Error', error.message);
+                    }
+                }
+            );
+        } else {
+            alert('Please enter valid credentials');
+        }
 
     }
 
@@ -156,18 +169,23 @@ const Header = (props) => {
         registerPassword === "" ? setRegisterPasswordRequired("dispBlock") : setRegisterPasswordRequired("dispNone");
         contact === "" ? setContactRequired("dispBlock") : setContactRequired("dispNone");
 
-        let dataSignup = {
-            "email_address": email,
-            "first_name": firstname,
-            "last_name": lastname,
-            "mobile_number": contact,
-            "password": registerPassword
-        };
+        /** Check for all data */
+        if (firstname && lastname && email && registerPassword && contact) {
+            let dataSignup = {
+                "email_address": email,
+                "first_name": firstname,
+                "last_name": lastname,
+                "mobile_number": contact,
+                "password": registerPassword
+            };
 
-        axios.post(props.baseUrl + "signup", dataSignup).then(res => {
-            setRegistrationSuccess(true);
-        });
-
+            axios.post(props.baseUrl + "signup", dataSignup).then(res => {
+                setRegistrationSuccess(true);
+            });
+        } else {
+            alert('Please fill all mandatory fields');
+            setRegistrationSuccess(false);
+        }
     }
 
     /** The following five handlers are for storing the inputs by the user for registration details */
@@ -309,7 +327,7 @@ const Header = (props) => {
                         <br /><br />
                         <FormControl required>
                             <InputLabel htmlFor="email">Email</InputLabel>
-                            <Input id="email" type="text" email={email} onChange={inputEmailChangeHandler} />
+                            <Input id="email" type="email" email={email} onChange={inputEmailChangeHandler} />
                             <FormHelperText className={emailRequired}>
                                 <span className="red">required</span>
                             </FormHelperText>
@@ -325,7 +343,7 @@ const Header = (props) => {
                         <br /><br />
                         <FormControl required>
                             <InputLabel htmlFor="contact">Contact No.</InputLabel>
-                            <Input id="contact" type="text" contact={contact} onChange={inputContactChangeHandler} />
+                            <Input id="contact" type="tel" contact={contact} onChange={inputContactChangeHandler} />
                             <FormHelperText className={contactRequired}>
                                 <span className="red">required</span>
                             </FormHelperText>
