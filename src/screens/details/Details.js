@@ -77,8 +77,8 @@ const Details=(props) =>  {
 
             }
             starIconList.push(starNode);
-        }
-        setStarIcons({ starIcons: starIconList });
+        }        
+        setStarIcons(starIconList);
     }
 
 
