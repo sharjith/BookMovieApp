@@ -107,7 +107,7 @@ const Header = (props) => {
                 username: username,
                 password: loginPassword
             }*/
-        }).then(res => {            
+        }).then(res => {
             sessionStorage.setItem("uuid", res.data.id);
             sessionStorage.setItem("access-token", res.headers['access-token']);
 
@@ -115,11 +115,27 @@ const Header = (props) => {
 
             closeModalHandler();
 
-            if(bookShowRequested){
+            /** If the user is shown the login modal because he clicked the book show 
+             * button without logging in, then take the user to the book show page
+             */
+            if (bookShowRequested) {
                 history.push('/bookshow/' + props.id);
                 setBookShowRequested(false);
             }
-        });
+        }).catch(
+            function (error) {
+                if (error.response) {
+                    // Request made and server responded
+                    alert(error.response.data.message);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    alert(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    alert('Error', error.message);
+                }
+            }
+        );
 
     }
 
@@ -186,7 +202,7 @@ const Header = (props) => {
     const guestBookShowHandler = (e) => {
         openModalHandler();
         setBookShowRequested(true);
-    } 
+    }
 
     /** return the div with the header, login/logout button, BookShow button and the Login/Register Modal */
     return (
