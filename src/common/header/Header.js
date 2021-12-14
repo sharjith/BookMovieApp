@@ -99,9 +99,7 @@ const Header = (props) => {
 
                 setTimeout(() => {
                     closeModalHandler();
-                }, 2000);
-                //closeModalHandler();
-
+                }, 2000);              
 
                 /** If the user is shown the login modal because he clicked the book show 
                  * button without logging in, then take the user to the book show page
