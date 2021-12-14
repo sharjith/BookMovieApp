@@ -52,7 +52,7 @@ const Header = (props) => {
     const [loginPasswordRequired, setLoginPasswordRequired] = useState("dispNone");
     const [loginPassword, setloginPassword] = useState("");
     const [firstnameRequired, setFirstnameRequired] = useState("dispNone");
-    const [firstname, setfFirstname] = useState("");
+    const [firstname, setFirstname] = useState("");
     const [lastnameRequired, setLastnameRequired] = useState("dispNone");
     const [lastname, setLastname] = useState("");
     const [emailRequired, setEmailRequired] = useState("dispNone");
@@ -60,7 +60,7 @@ const Header = (props) => {
     const [registerPasswordRequired, setRegisterPasswordRequired] = useState("dispNone");
     const [registerPassword, setRegisterPassword] = useState("");
     const [contactRequired, setContactRequired] = useState("dispNone");
-    const [contact, setContact] = useState("0");
+    const [contact, setContact] = useState("");
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [loggedIn, setLoggedIn] = useState(sessionStorage.getItem("access-token") == null ? false : true);
     const [bookShowRequested, setBookShowRequested] = useState(false);
@@ -75,6 +75,8 @@ const Header = (props) => {
 
     /** Handler  to set the state of any modal closed to track the status */
     const closeModalHandler = () => {
+        setUsername('');
+        setloginPassword('');
         setModalIsOpen(false);
     }
 
@@ -97,25 +99,19 @@ const Header = (props) => {
                 'Cache-Control': "no-cache"
             }
 
-            //const token = Buffer.from(`${username}:${loginPassword}`, 'utf8').toString('base64');
-
             /** use Axios post the sendthe header to the login API */
             axios.post(props.baseUrl + "auth/login", {}, {
-                headers
-                /*headers: {
-                    'Authorization': `Basic ${token}`
-                }*/
-                /*auth: {
-                    username: username,
-                    password: loginPassword
-                }*/
+                headers                
             }).then(res => {
                 sessionStorage.setItem("uuid", res.data.id);
                 sessionStorage.setItem("access-token", res.headers['access-token']);
 
                 setLoggedIn(true)
 
-                closeModalHandler();
+                // Automatically close the login modal after 2 seconds
+                setTimeout(() => {
+                    closeModalHandler();
+                }, 2000);  
 
                 /** If the user is shown the login modal because he clicked the book show 
                  * button without logging in, then take the user to the book show page
@@ -181,6 +177,17 @@ const Header = (props) => {
 
             axios.post(props.baseUrl + "signup", dataSignup).then(res => {
                 setRegistrationSuccess(true);
+
+                // Automatically switch to the login tab after 2 seconds and reset all the values
+                setTimeout(() => {
+                    setValue(0);
+                    setFirstname('');
+                    setLastname('');
+                    setEmail('');
+                    setContact('');
+                    setRegisterPassword('');
+                    setRegistrationSuccess(false);
+                }, 2000);
             });
         } else {
             alert('Please fill all mandatory fields');
@@ -190,7 +197,7 @@ const Header = (props) => {
 
     /** The following five handlers are for storing the inputs by the user for registration details */
     const inputFirstNameChangeHandler = (e) => {
-        setfFirstname(e.target.value);
+        setFirstname(e.target.value);
     }
 
     const inputLastNameChangeHandler = (e) => {
@@ -214,7 +221,6 @@ const Header = (props) => {
         sessionStorage.removeItem("uuid");
         sessionStorage.removeItem("access-token");
         setLoggedIn(false);
-
     }
 
     const guestBookShowHandler = (e) => {
@@ -302,7 +308,7 @@ const Header = (props) => {
                                 </span>
                             </FormControl>
                         }
-                        <br /><br />
+                        <br />
                         <Button variant="contained" color="primary" onClick={loginClickHandler}>LOGIN</Button>
                     </TabContainer>
                 }
@@ -356,7 +362,7 @@ const Header = (props) => {
                                 </span>
                             </FormControl>
                         }
-                        <br /><br />
+                        <br />
                         <Button variant="contained" color="primary" onClick={registerClickHandler}>REGISTER</Button>
                     </TabContainer>
                 }
