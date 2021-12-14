@@ -120,7 +120,7 @@ const Home = (props) => {
             queryString += "&title=" + movieName;
         }
         if (genres.length > 0) {
-            queryString += "&genres=" + genres.toString();
+            queryString += "&genre=" + genres.toString();
         }
         if (artists.length > 0) {
             queryString += "&artists=" + artists.toString();
