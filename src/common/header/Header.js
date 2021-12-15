@@ -101,7 +101,7 @@ const Header = (props) => {
 
             /** use Axios post the sendthe header to the login API */
             axios.post(props.baseUrl + "auth/login", {}, {
-                headers                
+                headers
             }).then(res => {
                 sessionStorage.setItem("uuid", res.data.id);
                 sessionStorage.setItem("access-token", res.headers['access-token']);
@@ -111,7 +111,7 @@ const Header = (props) => {
                 // Automatically close the login modal after 2 seconds
                 setTimeout(() => {
                     closeModalHandler();
-                }, 2000);  
+                }, 2000);
 
                 /** If the user is shown the login modal because he clicked the book show 
                  * button without logging in, then take the user to the book show page
@@ -218,9 +218,19 @@ const Header = (props) => {
 
     /** Handles the logout button click event */
     const logoutHandler = (e) => {
-        sessionStorage.removeItem("uuid");
-        sessionStorage.removeItem("access-token");
-        setLoggedIn(false);
+        const headers = {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache",
+            Authorization: "Bearer " + sessionStorage.getItem("access-token"),
+        }
+        axios.post(props.baseUrl + "auth/logout", {}, {
+            headers
+        }).then(res => {
+
+            sessionStorage.removeItem("uuid");
+            sessionStorage.removeItem("access-token");
+            setLoggedIn(false);
+        });
     }
 
     const guestBookShowHandler = (e) => {
